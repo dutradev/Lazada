@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical" android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="10dp"
+    >
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        >
+
+        <com.dutradev.lazada.CustomView.ClearEditText
+            android:id="@+id/edDiaChiEmailDangNhap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/inputEmail"
+            android:textColor="@color/colorBlack"
+            />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        >
+
+        <com.dutradev.lazada.CustomView.PasswordEditText
+            android:id="@+id/edMatKhauDangNhap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/inputPassword"
+            android:textColor="@color/colorBlack"
+            app:useStrike="true"
+            />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/txtQuenMatKhauDangNhap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/forgotPassword"
+        android:gravity="right"
+        android:layout_margin="10dp"
+        android:textColor="@color/colorPrimary"
+        />
+
+    <Button
+        android:id="@+id/btnDangNhap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonLogin"
+        android:layout_margin="10dp"
+        android:background="@color/bgLogo"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/notiLogIn"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/btnDangNhapFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/facebookiconsmall"
+            android:layout_weight="1"
+            android:text="@string/buttonFacebook"
+            android:background="@drawable/vienfacebook"
+            android:textColor="@color/colorFacebook"
+            android:layout_margin="10dp"
+            />
+
+        <Button
+            android:id="@+id/btnDangNhapGoogle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/googleplussmall"
+            android:layout_weight="1"
+            android:text="@string/buttonGoogle"
+            android:textColor="@color/colorGoogle"
+            android:background="@drawable/viengoogle"
+            android:layout_margin="10dp"
+            />
+
+    </LinearLayout>
+</LinearLayout>

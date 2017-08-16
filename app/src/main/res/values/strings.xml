@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Lazada</string>
+    <string name="open">Mở</string>
+    <string name="close">Đóng</string>
+    <string name="facebook_app_id">226449911213944</string>
+    <string name="google_plus_client">775430231878-fii7bffhs2lp9b1vl7k3m943s3uofts1.apps.googleusercontent.com</string>
+    <string name="loading">Loading...</string>
+
+    <!--fragment login-->
+    <string name="inputEmail">Địa chỉ email</string>
+    <string name="inputPassword">Mật khẩu</string>
+    <string name="forgotPassword">Quên mật khẩu ?</string>
+    <string name="buttonLogin">Đăng nhập</string>
+    <string name="notiLogIn">Hoặc đăng nhập bằng</string>
+    <string name="buttonFacebook">Facebook</string>
+    <string name="buttonGoogle">Google</string>
+
+    <!--end fragmen login-->
+</resources>

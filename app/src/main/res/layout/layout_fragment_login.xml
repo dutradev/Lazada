@@ -12,7 +12,7 @@
         android:layout_margin="10dp"
         >
 
-        <com.dutradev.lazada.CustomView.ClearEditText
+        <com.dutradev.lazada.customview.ClearEditText
             android:id="@+id/edDiaChiEmailDangNhap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         android:layout_margin="10dp"
         >
 
-        <com.dutradev.lazada.CustomView.PasswordEditText
+        <com.dutradev.lazada.customview.PasswordEditText
             android:id="@+id/edMatKhauDangNhap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

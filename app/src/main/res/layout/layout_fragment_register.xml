@@ -65,7 +65,7 @@
             android:layout_margin="10dp"
             >
 
-            <com.dutradev.lazada.CustomView.PasswordEditText
+            <com.dutradev.lazada.customview.PasswordEditText
                 android:id="@+id/edMatKhauDK"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
             android:layout_margin="10dp"
             >
 
-            <com.dutradev.lazada.CustomView.PasswordEditText
+            <com.dutradev.lazada.customview.PasswordEditText
                 android:id="@+id/edNhapLaiMatKhauDK"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -2,9 +2,10 @@ package com.dutradev.lazada.presenter.home.menuhandling;
 
 import com.dutradev.lazada.connectinternet.DownloadJSON;
 import com.dutradev.lazada.model.home.menuhandling.HandlingJSONMenu;
-import com.dutradev.lazada.model.signin.ModelSignIn;
+import com.dutradev.lazada.model.signinsignup.ModelSignIn;
 import com.dutradev.lazada.model.objectclass.ProductType;
-import com.dutradev.lazada.view.home.ViewMenuHandling;
+import com.dutradev.lazada.view.home.HomeActivity;
+import com.dutradev.lazada.view.home.IViewMenuHandling;
 import com.facebook.AccessToken;
 
 import java.util.ArrayList;
@@ -18,10 +19,10 @@ import java.util.concurrent.ExecutionException;
 
 public class PresenterLogicMenuHandling implements IPresenterMenuHandling {
 
-    ViewMenuHandling viewMenuHandling;
+    IViewMenuHandling IViewMenuHandling;
 
-    public PresenterLogicMenuHandling(ViewMenuHandling viewMenuHandling){
-        this.viewMenuHandling = viewMenuHandling;
+    public PresenterLogicMenuHandling(IViewMenuHandling IViewMenuHandling){
+        this.IViewMenuHandling = IViewMenuHandling;
     }
 
     @Override
@@ -37,12 +38,16 @@ public class PresenterLogicMenuHandling implements IPresenterMenuHandling {
         // end phương thức get
 
         //Lấy bằng phương thức post
-        String duongdan = "http://10.0.3.2/lazada/loaisanpham.php";
+        String duongdan = HomeActivity.SERVER_NAME ;
+
+        HashMap<String,String> hsHam = new HashMap<>();
+        hsHam.put("ham","LayDanhSachMenu");
 
         HashMap<String,String> hsMaLoaiCha = new HashMap<>();
         hsMaLoaiCha.put("maloaicha","0");
 
         attrs.add(hsMaLoaiCha);
+        attrs.add(hsHam);
 
         DownloadJSON downloadJSON = new DownloadJSON(duongdan,attrs);
         //end phương thức post
@@ -51,13 +56,14 @@ public class PresenterLogicMenuHandling implements IPresenterMenuHandling {
         try {
             dataJSON = downloadJSON.get();
             HandlingJSONMenu xuLyJSONMenu = new HandlingJSONMenu();
-            loaiSanPhamList = xuLyJSONMenu.ParseJSONMenu(dataJSON);
-            viewMenuHandling.HienThiDanhSachMenu(loaiSanPhamList);
+            loaiSanPhamList = xuLyJSONMenu.ParserJSONMenu(dataJSON);
+            IViewMenuHandling.showListMenu(loaiSanPhamList);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override

@@ -21,11 +21,11 @@ import android.widget.LinearLayout;
 
 import com.dutradev.lazada.adapter.ExpandAdapter;
 import com.dutradev.lazada.adapter.ViewPagerAdapter;
-import com.dutradev.lazada.model.signin.ModelSignIn;
+import com.dutradev.lazada.model.signinsignup.ModelSignIn;
 import com.dutradev.lazada.model.objectclass.ProductType;
 import com.dutradev.lazada.presenter.home.menuhandling.PresenterLogicMenuHandling;
 import com.dutradev.lazada.R;
-import com.dutradev.lazada.view.signin.SignInActivity;
+import com.dutradev.lazada.view.signinsignup.SignInActivity;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -45,7 +45,10 @@ import java.util.List;
  * Created by dutradev on 15/08/2017.
  */
 
-public class HomeActivity extends AppCompatActivity implements ViewMenuHandling, GoogleApiClient.OnConnectionFailedListener, AppBarLayout.OnOffsetChangedListener {
+public class HomeActivity extends AppCompatActivity implements IViewMenuHandling, GoogleApiClient.OnConnectionFailedListener, AppBarLayout.OnOffsetChangedListener {
+
+    public static final String SERVER_NAME = "http://10.0.3.2/lazada/loaisanpham.php";
+    public static final String SERVER = "http://10.0.3.2/lazada";
 
     Toolbar toolbar;
     TabLayout tabLayout;
@@ -99,7 +102,7 @@ public class HomeActivity extends AppCompatActivity implements ViewMenuHandling,
 
         logicMenuHandling.LayDanhSachMenu();
 
-        mGoogleApiClient = mModelSignIn.LayGoogleApiClient(this,this);
+        mGoogleApiClient = mModelSignIn.doGoogleApiClient(this, this);
 
         mAppBarLayout.addOnOffsetChangedListener(this);
 
@@ -114,9 +117,9 @@ public class HomeActivity extends AppCompatActivity implements ViewMenuHandling,
         itemLogOut = menu.findItem(R.id.itDangXuat);
 
         accessToken = logicMenuHandling.LayTokenDungFacebook();
-        mGoogleSignInResult = mModelSignIn.LayThongDangNhapGoogle(mGoogleApiClient);
+        mGoogleSignInResult = mModelSignIn.doInfoSignInGoogle(mGoogleApiClient);
 
-        if(accessToken != null){
+        if (accessToken != null) {
             GraphRequest graphRequest = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
@@ -132,18 +135,23 @@ public class HomeActivity extends AppCompatActivity implements ViewMenuHandling,
             });
 
             Bundle parameter = new Bundle();
-            parameter.putString("fields","name");
+            parameter.putString("fields", "name");
 
             graphRequest.setParameters(parameter);
             graphRequest.executeAsync();
         }
 
-        if(mGoogleSignInResult != null){
+        if (mGoogleSignInResult != null) {
             itemLogIn.setTitle(mGoogleSignInResult.getSignInAccount().getDisplayName());
             Log.d("goo", mGoogleSignInResult.getSignInAccount().getDisplayName());
         }
 
-        if(accessToken != null || mGoogleSignInResult != null){
+        String tennv = mModelSignIn.doCachedSignIn(this);
+        if(!tennv.equals("")){
+            itemLogIn.setTitle(tennv);
+        }
+
+        if (accessToken != null || mGoogleSignInResult != null || !tennv.equals("")) {
             itemLogOut.setVisible(true);
         }
 
@@ -159,10 +167,11 @@ public class HomeActivity extends AppCompatActivity implements ViewMenuHandling,
         int id = item.getItemId();
         switch (id) {
             case R.id.itDangNhap:
-                if(accessToken == null && mGoogleSignInResult == null) {
+                if (accessToken == null && mGoogleSignInResult == null && mModelSignIn.doCachedSignIn(this).equals("")) {
                     Intent iDangNhap = new Intent(this, SignInActivity.class);
                     startActivity(iDangNhap);
-                };
+                }
+                ;
                 break;
 
             case R.id.itDangXuat:
@@ -171,20 +180,25 @@ public class HomeActivity extends AppCompatActivity implements ViewMenuHandling,
                     this.menu.clear();
                     this.onCreateOptionsMenu(this.menu);
                 }
-                if(mGoogleSignInResult != null){
+                if (mGoogleSignInResult != null) {
                     Auth.GoogleSignInApi.signOut(mGoogleApiClient);
                     this.menu.clear();
                     this.onCreateOptionsMenu(this.menu);
 
                 }
-                ;break;
+                if(!mModelSignIn.doCachedSignIn(this).equals("")){
+                    mModelSignIn.updateCachedSignIn(this,"");
+                    this.menu.clear();
+                    this.onCreateOptionsMenu(this.menu);
+                }
+                break;
         }
 
         return true;
     }
 
     @Override
-    public void HienThiDanhSachMenu(List<ProductType> productTypes) {
+    public void showListMenu(List<ProductType> productTypes) {
         ExpandAdapter adapter = new ExpandAdapter(this, productTypes);
         expandableListView.setAdapter(adapter);
         expandableListView.deferNotifyDataSetChanged();
@@ -197,20 +211,20 @@ public class HomeActivity extends AppCompatActivity implements ViewMenuHandling,
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        if(mCollapsingToolbarLayout.getHeight() + verticalOffset <=  1.5 * ViewCompat.getMinimumHeight(mCollapsingToolbarLayout)){
+        if (mCollapsingToolbarLayout.getHeight() + verticalOffset <= 1.5 * ViewCompat.getMinimumHeight(mCollapsingToolbarLayout)) {
             LinearLayout linearLayout = (LinearLayout) appBarLayout.findViewById(R.id.linear_search);
             linearLayout.animate().alpha(0).setDuration(200);
 
             MenuItem itSearch = menu.findItem(R.id.itSearch);
             itSearch.setVisible(true);
 
-        }else{
+        } else {
             LinearLayout linearLayout = (LinearLayout) appBarLayout.findViewById(R.id.linear_search);
             linearLayout.animate().alpha(1).setDuration(200);
-            try{
+            try {
                 MenuItem itSearch = menu.findItem(R.id.itSearch);
                 itSearch.setVisible(false);
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 

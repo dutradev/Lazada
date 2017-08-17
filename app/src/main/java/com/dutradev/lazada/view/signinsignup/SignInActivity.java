@@ -1,4 +1,4 @@
-package com.dutradev.lazada.view.signin;
+package com.dutradev.lazada.view.signinsignup;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

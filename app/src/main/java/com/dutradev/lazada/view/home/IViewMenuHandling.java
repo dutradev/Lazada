@@ -8,6 +8,6 @@ import java.util.List;
  * Created by dutradev on 15/08/2017.
  */
 
-public interface ViewMenuHandling {
-    void HienThiDanhSachMenu(List<ProductType>productTypes);
+public interface IViewMenuHandling {
+    void showListMenu(List<ProductType>productTypes);
 }

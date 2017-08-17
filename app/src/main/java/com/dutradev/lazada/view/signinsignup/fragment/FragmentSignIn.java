@@ -1,4 +1,4 @@
-package com.dutradev.lazada.view.signin.fragment;
+package com.dutradev.lazada.view.signinsignup.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import com.dutradev.lazada.model.signin.ModelSignIn;
+import com.dutradev.lazada.model.signinsignup.ModelSignIn;
 import com.dutradev.lazada.R;
 import com.dutradev.lazada.view.home.HomeActivity;
 import com.facebook.CallbackManager;
@@ -32,21 +34,23 @@ import java.util.Arrays;
 
 public class FragmentSignIn extends Fragment implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener{
 
-    Button btnDangNhapFacebook,btnDangNhapGoogle;
+    Button btnDangNhapFacebook,btnDangNhapGoogle,btnDangNhap;
     CallbackManager callbackManager;
     GoogleApiClient mGoogleApiClient;
     public static int SIGN_IN_GOOGLE_PLUS = 111;
-    ModelSignIn modelSignIn;
+    ModelSignIn mModelSignIn;
     ProgressDialog progressDialog;
+    EditText edTenDangNhap,edMatKhau;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.layout_fragment_login,container,false);
+        View view = inflater.inflate(R.layout.layout_fragment_signin,container,false);
         //FacebookSdk.sdkInitialize(getContext().getApplicationContext());
 
-        modelSignIn = new ModelSignIn();
-        mGoogleApiClient = modelSignIn.LayGoogleApiClient(getContext(),this);
+        mModelSignIn = new ModelSignIn();
+        mGoogleApiClient = mModelSignIn.doGoogleApiClient(getContext(),this);
 
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -69,8 +73,13 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,Goo
 
         btnDangNhapFacebook = (Button) view.findViewById(R.id.btnDangNhapFacebook);
         btnDangNhapGoogle = (Button) view.findViewById(R.id.btnDangNhapGoogle);
+        btnDangNhap = (Button) view.findViewById(R.id.btnDangNhap);
+        edTenDangNhap = (EditText) view.findViewById(R.id.edDiaChiEmailDangNhap);
+        edMatKhau = (EditText) view.findViewById(R.id.edMatKhauDangNhap);
+
         btnDangNhapFacebook.setOnClickListener(this);
         btnDangNhapGoogle.setOnClickListener(this);
+        btnDangNhap.setOnClickListener(this);
 
         return view;
     }
@@ -86,6 +95,17 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,Goo
                 Intent iGooglePlus = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                 startActivityForResult(iGooglePlus,SIGN_IN_GOOGLE_PLUS);
                 showProcessDialog();
+                ;break;
+            case R.id.btnDangNhap:
+                String mUserName = edTenDangNhap.getText().toString();
+                String mPassword = edMatKhau.getText().toString();
+                boolean isValid = mModelSignIn.checkSignIn(getActivity(),mUserName,mPassword);
+                if(isValid){
+                    Intent iTrangChu = new Intent(getActivity(), HomeActivity.class);
+                    startActivity(iTrangChu);
+                }else{
+                    Toast.makeText(getActivity(),"Tên đăng nhập và mật khẩu không đúng !",Toast.LENGTH_SHORT).show();
+                }
                 ;break;
         }
 

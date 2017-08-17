@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.dutradev.lazada.view.signin.fragment.FragmentSignIn;
-import com.dutradev.lazada.view.signin.fragment.FragmentSignUp;
+import com.dutradev.lazada.view.signinsignup.fragment.FragmentSignIn;
+import com.dutradev.lazada.view.signinsignup.fragment.FragmentISignUp;
 
 /**
  * Created by dutradev on 15/08/2017.
@@ -23,7 +23,7 @@ public class ViewPagerAdapterLogin extends FragmentPagerAdapter{
                 FragmentSignIn fragmentSignIn = new FragmentSignIn();
                 return fragmentSignIn;
             case 1 :
-                FragmentSignUp fragmentSignUp = new FragmentSignUp();
+                FragmentISignUp fragmentSignUp = new FragmentISignUp();
                 return fragmentSignUp;
 
             default: return null;

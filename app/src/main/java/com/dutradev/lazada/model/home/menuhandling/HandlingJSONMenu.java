@@ -1,7 +1,10 @@
 package com.dutradev.lazada.model.home.menuhandling;
 
+import android.util.Log;
+
 import com.dutradev.lazada.connectinternet.DownloadJSON;
 import com.dutradev.lazada.model.objectclass.ProductType;
+import com.dutradev.lazada.view.home.HomeActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,59 +20,60 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class HandlingJSONMenu {
-    public List<ProductType> ParseJSONMenu(String dulieujson) {
+    public List<ProductType> ParserJSONMenu(String dulieujson){
         List<ProductType> loaiSanPhamList = new ArrayList<>();
-
         try {
+            Log.d("kiemtra",dulieujson);
             JSONObject jsonObject = new JSONObject(dulieujson);
             JSONArray loaisanpham = jsonObject.getJSONArray("LOAISANPHAM");
-
             int count = loaisanpham.length();
-            for (int i = 0; i < count; i++) {
+            for(int i=0;i<count;i++){
                 JSONObject value = loaisanpham.getJSONObject(i);
 
-                ProductType dataLoaiSanPham = new ProductType();
-                dataLoaiSanPham.setMALOAISP(Integer.parseInt(value.getString("MALOAISP")));
-                dataLoaiSanPham.setMALOAICHA(Integer.parseInt(value.getString("MALOAI_CHA")));
-                dataLoaiSanPham.setTENLOAISP(value.getString("TENLOAISP"));
+                ProductType dataloaiSanPham = new ProductType();
+                dataloaiSanPham.setMALOAISP(Integer.parseInt(value.getString("MALOAISP")));
+                dataloaiSanPham.setMALOAICHA(Integer.parseInt(value.getString("MALOAI_CHA")));
+                dataloaiSanPham.setTENLOAISP(value.getString("TENLOAISP"));
 
-                loaiSanPhamList.add(dataLoaiSanPham);
+                loaiSanPhamList.add(dataloaiSanPham);
             }
-
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-
         return loaiSanPhamList;
     }
 
-    public List<ProductType> LayLoaiSanPhamTheoMaLoai(int maloaisp) {
+    public List<ProductType> LayLoaiSanPhamTheoMaLoai(int maloaisp){
         List<ProductType> loaiSanPhamList = new ArrayList<>();
-        List<HashMap<String, String>> attrs = new ArrayList<>();
+        List<HashMap<String,String>> attrs = new ArrayList<>();
         String dataJSON = "";
 
-        String duongdan = "http://10.0.3.2/lazada/loaisanpham.php";
-        HashMap<String, String> hsMaLoaiCha = new HashMap<>();
-        hsMaLoaiCha.put("maloaicha", String.valueOf(maloaisp));
+        String duongdan = HomeActivity.SERVER_NAME;
+
+        HashMap<String,String> hsHam = new HashMap<>();
+        hsHam.put("ham","LayDanhSachMenu");
+
+        HashMap<String,String> hsMaLoaiCha = new HashMap<>();
+        hsMaLoaiCha.put("maloaicha",String.valueOf(maloaisp));
+
         attrs.add(hsMaLoaiCha);
-        DownloadJSON downloadJSON = new DownloadJSON(duongdan, attrs);
-        //end POST
+        attrs.add(hsHam);
+
+        DownloadJSON downloadJSON = new DownloadJSON(duongdan,attrs);
+        //end phương thức post
         downloadJSON.execute();
 
         try {
             dataJSON = downloadJSON.get();
             HandlingJSONMenu xuLyJSONMenu = new HandlingJSONMenu();
-            loaiSanPhamList = xuLyJSONMenu.ParseJSONMenu(dataJSON);
-
-
+            loaiSanPhamList = xuLyJSONMenu.ParserJSONMenu(dataJSON);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
 
         return loaiSanPhamList;
     }
